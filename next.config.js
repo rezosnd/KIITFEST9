@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
+  // Ensure Next infers the correct workspace root when multiple lockfiles exist
+  outputFileTracingRoot: path.join(__dirname, '.'),
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'dev.to' },

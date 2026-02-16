@@ -11,15 +11,15 @@ export default function ScrollToTopButton() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  if (!visible) {
-    return null;
-  }
+  if (!visible) return null;
 
   return (
     <button
+      id="scrollToTop"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-6 right-6 z-50 nes-btn is-error"
+      className={`nes-btn is-error visible`}
       aria-label="Scroll to top"
+      style={{ zIndex: 1301 }}
     >
       ↑
     </button>

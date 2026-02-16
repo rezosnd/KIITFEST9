@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -15,6 +15,7 @@ const links = [
 export default function Navbar({ variant = 'dark' }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const listRef = useRef(null);
 
   const handleNav = async (href) => {
@@ -22,7 +23,7 @@ export default function Navbar({ variant = 'dark' }) {
 
     if (href.startsWith('/#')) {
       const targetId = href.split('#')[1];
-      if (router.pathname === '/') {
+      if (pathname === '/') {
         const el = document.getElementById(targetId);
         if (el) {
           window.history.replaceState(null, '', href);
@@ -47,18 +48,20 @@ export default function Navbar({ variant = 'dark' }) {
   ];
 
   useEffect(() => {
-    const handleRoute = () => setOpen(false);
     const handleResize = () => {
       if (window.innerWidth >= 768) setOpen(false);
     };
 
-    router.events.on('routeChangeComplete', handleRoute);
     window.addEventListener('resize', handleResize);
     return () => {
-      router.events.off('routeChangeComplete', handleRoute);
       window.removeEventListener('resize', handleResize);
     };
-  }, [router.events]);
+  }, [router]);
+
+  // Close the mobile menu on pathname change (App Router)
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <header className="w-full">
@@ -84,7 +87,7 @@ export default function Navbar({ variant = 'dark' }) {
                 className="rounded-2xl p-3 mb-3 shadow-inner"
                 style={{ backgroundImage: 'linear-gradient(180deg, #FF3300 0%, #171717 100%)' }}
               >
-                <div className="rounded-lg p-4 h-80 relative overflow-hidden" style={{ backgroundColor: '#171717' }}>
+                <div className="rounded-lg p-4 h-80 relative overflow-visible" style={{ backgroundColor: '#171717' }}>
                   <div className="absolute top-2 left-2 right-2">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="font-bold text-lg" style={{ color: '#3CFFF3' }}>KIIT FEST 9.0</div>
@@ -171,51 +174,49 @@ export default function Navbar({ variant = 'dark' }) {
                 style={{ backgroundImage: 'linear-gradient(180deg, #FF2E88 0%, #7A3BFF 100%)' }}
               >
                 <div className="flex justify-between items-center">
-                  <div className="relative w-24 h-24 md:scale-150">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative w-20 h-20">
-                        <button
-                          onClick={() => {
-                            if (!listRef.current) return;
-                            listRef.current.scrollBy({ top: -120, behavior: 'smooth' });
-                          }}
-                          className="hover:cursor-pointer absolute top-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-t border-2 shadow-md transition-transform hover:brightness-110"
-                          style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-up mx-auto text-gray-400" aria-hidden="true"><path d="m18 15-6-6-6 6" /></svg>
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (!listRef.current) return;
-                            listRef.current.scrollBy({ top: 120, behavior: 'smooth' });
-                          }}
-                          className="hover:cursor-pointer absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-b border-2 shadow-md transition-transform hover:brightness-110"
-                          style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down mx-auto text-gray-400" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (!listRef.current) return;
-                            listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          className="hover:cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-l border-2 shadow-md transition-transform hover:brightness-110"
-                          style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left mx-auto text-gray-400" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (!listRef.current) return;
-                            listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
-                          }}
-                          className="hover:cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-r border-2 shadow-md transition-transform hover:brightness-110"
-                          style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right mx-auto text-gray-400" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
-                        </button>
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7" style={{ backgroundColor: '#171717', border: '2px solid #7A3BFF' }} />
-                      </div>
+                  <div className="absolute inset-0 flex items-center justify-center controls-wrapper">
+                    <div className="relative w-20 h-20">
+                      <button
+                        onClick={() => {
+                          if (!listRef.current) return;
+                          listRef.current.scrollBy({ top: -120, behavior: 'smooth' });
+                        }}
+                        className="hover:cursor-pointer absolute top-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-t border-2 shadow-md transition-transform hover:brightness-110"
+                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-up mx-auto text-gray-400" aria-hidden="true"><path d="m18 15-6-6-6 6" /></svg>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (!listRef.current) return;
+                          listRef.current.scrollBy({ top: 120, behavior: 'smooth' });
+                        }}
+                        className="hover:cursor-pointer absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-b border-2 shadow-md transition-transform hover:brightness-110"
+                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down mx-auto text-gray-400" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (!listRef.current) return;
+                          listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="hover:cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-l border-2 shadow-md transition-transform hover:brightness-110"
+                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left mx-auto text-gray-400" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (!listRef.current) return;
+                          listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
+                        }}
+                        className="hover:cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-r border-2 shadow-md transition-transform hover:brightness-110"
+                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right mx-auto text-gray-400" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+                      </button>
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7" style={{ backgroundColor: '#171717', border: '2px solid #7A3BFF' }} />
                     </div>
                   </div>
 

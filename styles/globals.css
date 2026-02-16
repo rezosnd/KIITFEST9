@@ -86,6 +86,44 @@ a {
 
 .nav-item { margin: 0 10px; }
 
+/* ensure mobile arrow buttons are above the menu visuals */
+.mobile-arrow-button { z-index: 1302; }
+
+@media (max-width: 767px) {
+  /* position arrow buttons close around the center dot */
+  .relative.w-20 .mobile-arrow-button {
+    width: 36px !important;
+    height: 36px !important;
+    opacity: 1;
+  }
+  .relative.w-20 .mobile-up {
+    top: 34% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .relative.w-20 .mobile-down {
+    top: 66% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .relative.w-20 .mobile-left {
+    top: 50% !important;
+    left: 34% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .relative.w-20 .mobile-right {
+    top: 50% !important;
+    left: 66% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .controls-wrapper {
+    transform: translateY(12px) !important;
+  }
+}
+
 .section {
   min-height: 100vh;
   display: flex;
@@ -281,3 +319,19 @@ a {
 }
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Ensure mobile arrow controls are visible and pinned on small screens */
+.mobile-arrow-button { z-index: 1301; }
+@media (max-width: 767px) {
+  .mobile-arrow-button {
+    position: fixed !important;
+    background-color: #FF3300 !important;
+    border-color: #171717 !important;
+    color: #FFEF12 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .mobile-arrow-button[style] { /* preserve inline size but ensure visibility */
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
