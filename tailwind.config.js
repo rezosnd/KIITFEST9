@@ -4,6 +4,11 @@ module.exports = {
     "./app/**/*.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}"
   ],
+  // Temporarily disable Preflight if you rely on browser defaults
+  // to restore earlier visual behavior after upgrading to Tailwind v4.
+  corePlugins: {
+    preflight: false,
+  },
   theme: {
     extend: {
       fontFamily: {

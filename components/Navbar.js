@@ -1,7 +1,9 @@
+"use client";
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -47,6 +49,7 @@ export default function Navbar({ variant = 'dark' }) {
     { href: '/privacy', label: 'PRIVACY', icon: 'shield' },
   ];
 
+  // Close menu on resize (desktop)
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setOpen(false);
@@ -56,9 +59,9 @@ export default function Navbar({ variant = 'dark' }) {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [router]);
+  }, []);
 
-  // Close the mobile menu on pathname change (App Router)
+  // Close menu on route change (App Router equivalent)
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
@@ -70,11 +73,20 @@ export default function Navbar({ variant = 'dark' }) {
           <Link href="/" className="flex items-center justify-start">
             <Image src="/indexbg/KIIT_pixel.png" alt="logo" width={32} height={32} className="img h-8 w-auto" />
           </Link>
-          <button aria-label="Toggle navigation" onClick={() => setOpen(!open)} className="flex items-center justify-end">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="px-3 py-1 rounded-md border-2 text-sm font-medium"
+              style={{ backgroundColor: '#FFEF12', color: '#171717', borderColor: '#7A3BFF' }}
+            >
+              Login
+            </Link>
+            <button aria-label="Toggle navigation" onClick={() => setOpen(!open)} className="flex items-center justify-end">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {open && (
@@ -87,7 +99,7 @@ export default function Navbar({ variant = 'dark' }) {
                 className="rounded-2xl p-3 mb-3 shadow-inner"
                 style={{ backgroundImage: 'linear-gradient(180deg, #FF3300 0%, #171717 100%)' }}
               >
-                <div className="rounded-lg p-4 h-80 relative overflow-visible" style={{ backgroundColor: '#171717' }}>
+                <div className="rounded-lg p-4 h-80 relative overflow-hidden" style={{ backgroundColor: '#171717' }}>
                   <div className="absolute top-2 left-2 right-2">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="font-bold text-lg" style={{ color: '#3CFFF3' }}>KIIT FEST 9.0</div>
@@ -173,8 +185,23 @@ export default function Navbar({ variant = 'dark' }) {
                 className="rounded-2xl p-6 shadow-inner"
                 style={{ backgroundImage: 'linear-gradient(180deg, #FF2E88 0%, #7A3BFF 100%)' }}
               >
+                {/* Bottom row with three columns: close button (left), controls (center), A/B (right) */}
                 <div className="flex justify-between items-center">
-                  <div className="absolute inset-0 flex items-center justify-center controls-wrapper">
+                  {/* Close button (left) */}
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="grid grid-cols-3 gap-1 p-2 rounded-md shadow-inner hover:brightness-110 transition"
+                    aria-label="Close menu"
+                    style={{ backgroundColor: 'rgb(23, 23, 23)', border: '2px solid rgb(122, 59, 255)' }}
+                    title="Close menu"
+                  >
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgb(255, 239, 18)' }} />
+                    ))}
+                  </button>
+
+                  {/* D‑pad controls (center) – exactly as provided by the user */}
+                  <div className="flex-1 flex justify-center items-center">
                     <div className="relative w-20 h-20">
                       <button
                         onClick={() => {
@@ -182,7 +209,7 @@ export default function Navbar({ variant = 'dark' }) {
                           listRef.current.scrollBy({ top: -120, behavior: 'smooth' });
                         }}
                         className="hover:cursor-pointer absolute top-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-t border-2 shadow-md transition-transform hover:brightness-110"
-                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                        style={{ backgroundColor: 'rgb(255, 51, 0)', borderColor: 'rgb(23, 23, 23)', color: 'rgb(255, 239, 18)' }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-up mx-auto text-gray-400" aria-hidden="true"><path d="m18 15-6-6-6 6" /></svg>
                       </button>
@@ -192,7 +219,7 @@ export default function Navbar({ variant = 'dark' }) {
                           listRef.current.scrollBy({ top: 120, behavior: 'smooth' });
                         }}
                         className="hover:cursor-pointer absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-9 rounded-b border-2 shadow-md transition-transform hover:brightness-110"
-                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                        style={{ backgroundColor: 'rgb(255, 51, 0)', borderColor: 'rgb(23, 23, 23)', color: 'rgb(255, 239, 18)' }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down mx-auto text-gray-400" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
                       </button>
@@ -202,7 +229,7 @@ export default function Navbar({ variant = 'dark' }) {
                           listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                         className="hover:cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-l border-2 shadow-md transition-transform hover:brightness-110"
-                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                        style={{ backgroundColor: 'rgb(255, 51, 0)', borderColor: 'rgb(23, 23, 23)', color: 'rgb(255, 239, 18)' }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left mx-auto text-gray-400" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
                       </button>
@@ -212,28 +239,34 @@ export default function Navbar({ variant = 'dark' }) {
                           listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
                         }}
                         className="hover:cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 w-9 h-7 rounded-r border-2 shadow-md transition-transform hover:brightness-110"
-                        style={{ backgroundColor: '#FF3300', borderColor: '#171717', color: '#FFEF12' }}
+                        style={{ backgroundColor: 'rgb(255, 51, 0)', borderColor: 'rgb(23, 23, 23)', color: 'rgb(255, 239, 18)' }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right mx-auto text-gray-400" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
                       </button>
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7" style={{ backgroundColor: '#171717', border: '2px solid #7A3BFF' }} />
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7" style={{ backgroundColor: 'rgb(23, 23, 23)', border: '2px solid rgb(122, 59, 255)' }} />
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setOpen(false)}
-                    className="grid grid-cols-3 gap-1 p-2 rounded-md shadow-inner hover:brightness-110 transition"
-                    style={{ backgroundColor: '#171717', border: '2px solid #7A3BFF' }}
-                    aria-label="Close menu"
-                  >
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#FFEF12' }} />
-                    ))}
-                  </button>
-
+                  {/* A/B buttons (right) */}
                   <div className="relative w-24 h-24 md:scale-110">
-                    <button className="hover:cursor-pointer absolute top-2 right-2 w-11 h-11 rounded-full border-[3px] shadow-lg flex items-center justify-center font-bold text-lg transition-transform hover:brightness-110" style={{ backgroundColor: '#3CFFF3', borderColor: '#7A3BFF', color: '#171717' }}>A</button>
-                    <button className="hover:cursor-pointer absolute bottom-2 left-2 w-11 h-11 rounded-full border-[3px] shadow-lg flex items-center justify-center font-bold text-lg hover:brightness-110 transition-transform" style={{ backgroundColor: '#FF2E88', borderColor: '#7A3BFF', color: '#171717' }}>B</button>
+                    <button
+                      className="hover:cursor-pointer absolute top-2 right-2 w-11 h-11 rounded-full border-[3px] shadow-lg flex items-center justify-center font-bold text-lg transition-transform hover:brightness-110"
+                      style={{ backgroundColor: '#3CFFF3', borderColor: '#7A3BFF', color: '#171717' }}
+                    >
+                      A
+                    </button>
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        router.back();
+                      }}
+                      aria-label="Back"
+                      title="Back"
+                      className="hover:cursor-pointer absolute bottom-2 left-2 w-11 h-11 rounded-full border-[3px] shadow-lg flex items-center justify-center font-bold text-lg hover:brightness-110 transition-transform"
+                      style={{ backgroundColor: '#FF2E88', borderColor: '#7A3BFF', color: '#171717' }}
+                    >
+                      B
+                    </button>
                   </div>
                 </div>
               </div>

@@ -2,6 +2,8 @@
 const path = require('path');
 
 const nextConfig = {
+  // Explicit empty turbopack config: keeps Turbopack enabled but allows using custom webpack config
+  turbopack: {},
   // Ensure Next infers the correct workspace root when multiple lockfiles exist
   outputFileTracingRoot: path.join(__dirname, '.'),
   images: {
