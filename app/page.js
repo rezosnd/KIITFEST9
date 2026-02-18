@@ -323,7 +323,7 @@ const rotatingTexts = [
 // gold/yellow accents, blue face, dark maroon base.
 function CountdownTimer() {
   // Set your fest date here  ↓↓↓
-  const FEST_DATE = new Date('2025-03-14T00:00:00')
+  const FEST_DATE = new Date('2026-03-06T00:00:00')
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
