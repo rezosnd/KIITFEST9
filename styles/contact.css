@@ -1,0 +1,441 @@
+.contact-section {
+  min-height: 100vh;
+  background-image: url('/indexbg/bg0.png');
+  background-repeat: repeat;
+  background-position: top center;
+  background-size: 30% auto;
+  background-attachment: scroll;
+  color: #ffef12;
+  padding: 100px 20px 40px;
+  font-family: 'Press Start 2P', monospace;
+  position: relative;
+}
+
+.contact-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/indexbg/bg0.png');
+  background-repeat: repeat;
+  background-position: 40% 40%;
+  background-size: 30% auto;
+  opacity: 0.28;
+  transform: scaleX(-1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* =============================================
+   Header
+   ============================================= */
+.contact-header {
+  text-align: center;
+  border: 4px solid #ff3300;
+  padding: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 51, 0, 0.1) 0%,
+    rgba(255, 46, 136, 0.1) 100%
+  );
+}
+
+.contact-header h1 {
+  font-size: 48px;
+  margin: 0 0 15px 0;
+  letter-spacing: 4px;
+  color: #ff3300;
+  text-shadow:
+    4px 4px 0px #7a3bff,
+    8px 8px 0px #ff2e88;
+}
+
+.contact-header .subtitle {
+  font-size: 16px;
+  color: #3cfff3;
+  margin: 0 0 10px 0;
+  letter-spacing: 2px;
+}
+
+.contact-header .tagline {
+  font-size: 12px;
+  color: #ffef12;
+  margin: 0;
+  letter-spacing: 1px;
+  animation: blink 1.2s step-end infinite;
+}
+
+/* =============================================
+   Side-by-side body layout
+   ============================================= */
+.contact-body {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: stretch;
+  min-height: 560px;
+}
+
+/* =============================================
+   Info Cards — stacked vertically on the left
+   ============================================= */
+.contact-info-grid {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.info-card {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #171717;
+  border: 4px solid #ff3300;
+  font-size: 11px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 239, 18, 0.08),
+    transparent
+  );
+  animation: scan 3s infinite;
+}
+
+.info-card:nth-child(2) {
+  border-color: #ff2e88;
+}
+.info-card:nth-child(3) {
+  border-color: #3cfff3;
+}
+.info-card:nth-child(4) {
+  border-color: #7a3bff;
+}
+
+.info-card:hover {
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 #ffef12;
+}
+
+.info-card h3 {
+  font-size: 13px;
+  margin: 0 0 10px 0;
+  letter-spacing: 2px;
+  color: #ffef12;
+  position: relative;
+  z-index: 1;
+}
+
+.info-card p {
+  margin: 0;
+  line-height: 1.8;
+  font-size: 10px;
+  color: #3cfff3;
+  position: relative;
+  z-index: 1;
+}
+
+/* =============================================
+   Game Map — right side
+   ============================================= */
+.map-wrapper {
+  position: relative;
+  border: 6px solid #ff3300;
+  box-shadow:
+    0 0 0 3px #7a3bff,
+    0 0 30px #ff3300,
+    0 0 60px rgba(255, 51, 0, 0.25),
+    12px 12px 0px #7a3bff;
+  overflow: hidden;
+}
+
+/* Tile filter: invert + hue-rotate = neon-on-dark retro style */
+.map-wrapper .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(200deg) saturate(4) brightness(0.8) contrast(1.4);
+}
+
+/* Neon color overlay */
+.map-color-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(23, 23, 23, 0.5) 0%,
+    rgba(122, 59, 255, 0.2) 50%,
+    rgba(60, 255, 243, 0.15) 100%
+  );
+  pointer-events: none;
+  z-index: 400;
+  mix-blend-mode: multiply;
+}
+
+/* CRT scanlines */
+.map-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.15) 3px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 401;
+  animation: scanRoll 10s linear infinite;
+}
+
+/* Pixel corner brackets */
+.map-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 402;
+  pointer-events: none;
+}
+.map-corner--tl {
+  top: 8px;
+  left: 8px;
+  border-top: 4px solid #ffef12;
+  border-left: 4px solid #ffef12;
+}
+.map-corner--tr {
+  top: 8px;
+  right: 8px;
+  border-top: 4px solid #ff2e88;
+  border-right: 4px solid #ff2e88;
+}
+.map-corner--bl {
+  bottom: 8px;
+  left: 8px;
+  border-bottom: 4px solid #7a3bff;
+  border-left: 4px solid #7a3bff;
+}
+.map-corner--br {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 4px solid #3cfff3;
+  border-right: 4px solid #3cfff3;
+}
+
+/* =============================================
+   YOU ARE HERE marker
+   ============================================= */
+.you-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 500;
+}
+
+.you-blink {
+  font-size: 30px;
+  color: #ff3300;
+  text-shadow:
+    0 0 10px #ff3300,
+    0 0 24px #ff2e88;
+  animation: youPulse 0.8s step-end infinite;
+  display: block;
+  line-height: 1;
+}
+
+.you-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #ffef12;
+  background: rgba(23, 23, 23, 0.92);
+  border: 2px solid #ff3300;
+  padding: 3px 6px;
+  margin-top: 4px;
+  white-space: nowrap;
+  box-shadow: 0 0 8px #ff3300;
+}
+
+/* =============================================
+   Arcade Zoom Control
+   ============================================= */
+.arcade-zoom-ctrl {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 10px 0 0;
+  border: 3px solid #ff3300;
+  box-shadow: 3px 3px 0 #7a3bff;
+  overflow: hidden;
+}
+
+.arcade-zoom-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  background: #171717;
+  color: #ffef12;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+  line-height: 1;
+}
+
+.arcade-zoom-btn:hover {
+  background: #ff3300;
+  color: #171717;
+}
+
+.arcade-zoom-btn:active {
+  background: #ffef12;
+  color: #171717;
+}
+
+.arcade-zoom-divider {
+  height: 2px;
+  background: #ff3300;
+}
+
+/* Attribution hide */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+/* =============================================
+   Status Bar
+   ============================================= */
+.status-bar {
+  text-align: center;
+  padding: 15px;
+  background-color: #171717;
+  border: 3px solid #ffef12;
+  font-size: 12px;
+  color: #ffef12;
+  letter-spacing: 2px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* =============================================
+   Animations
+   ============================================= */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes youPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes scanRoll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 200px;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 900px) {
+  .contact-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: unset;
+  }
+
+  .contact-info-grid {
+    grid-template-rows: unset;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .map-wrapper {
+    height: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-header h1 {
+    font-size: 28px;
+  }
+  .contact-header .subtitle {
+    font-size: 12px;
+  }
+  .contact-header .tagline {
+    font-size: 10px;
+  }
+  .contact-container {
+    gap: 24px;
+  }
+
+  .contact-info-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .info-card {
+    padding: 14px;
+  }
+  .info-card h3 {
+    font-size: 11px;
+  }
+  .info-card p {
+    font-size: 9px;
+  }
+
+  .map-wrapper {
+    height: 300px;
+  }
+  .status-bar {
+    font-size: 9px;
+    padding: 12px;
+    letter-spacing: 1px;
+  }
+}

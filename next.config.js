@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
-const path = require('path');
+const path = require('path')
 
 const nextConfig = {
+  transpilePackages: ['leaflet'],
   // Explicit empty turbopack config: keeps Turbopack enabled but allows using custom webpack config
   turbopack: {},
   // Ensure Next infers the correct workspace root when multiple lockfiles exist
@@ -17,9 +18,9 @@ const nextConfig = {
   },
   webpack: (config) => {
     // Disable persistent webpack file cache to avoid corrupt pack files causing OOM
-    config.cache = false;
-    return config;
+    config.cache = false
+    return config
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
